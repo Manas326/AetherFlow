@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>AI-Driven Network Security — Dashboard</title>
+    <style>
+      body{font-family:Arial;margin:24px}
+      h1{color:#111}
+      table{border-collapse:collapse;width:100%}
+      th,td{border:1px solid #ddd;padding:8px}
+      th{background:#f4f4f4}
+      .btn{padding:8px 12px;background:#007bff;color:#fff;border:none;border-radius:6px;cursor:pointer}
+    </style>
+  </head>
+  <body>
+    <h1>AI-Driven Network Security — Dashboard</h1>
+    <p>Model: {{ model_path }} | Threshold: {{ threshold }}</p>
+    <button id="run" class="btn">Run Inference</button>
+    <h2>Recent Alerts</h2>
+    <table>
+      <thead><tr><th>ID</th><th>Time</th><th>Src</th><th>Dst</th><th>Proto</th><th>Score</th></tr></thead>
+      <tbody id="alerts-body">
+        {% for a in alerts %}
+          <tr>
+            <td>{{ a[0] }}</td>
+            <td>{{ a[1] }}</td>
+            <td>{{ a[2] }}</td>
+            <td>{{ a[3] }}</td>
+            <td>{{ a[4] }}</td>
+            <td>{{ '%.6f'|format(a[5]) }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <script>
+      document.getElementById('run').addEventListener('click', () => {
+        fetch('/run_inference', {method:'POST'}).then(r=>r.json()).then(()=>alert('Inference started (background)'));
+      });
+    </script>
+  </body>
+</html>
